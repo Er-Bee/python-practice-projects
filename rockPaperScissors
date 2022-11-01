@@ -1,0 +1,23 @@
+while True:
+    p1 = (input("player 1, please type your choice: (rock, paper, scissors)\n")).lower()
+    p2 = (input("player 2, please type your choice: (rock, paper, scissors)\n")).lower()
+    if p1 == p2:
+        print("it's a tie!\n")
+    elif p1 == "rock":
+        if p2 == "paper":
+            print("p2 has won!\n")
+        elif p2 == "scissors":
+            print("p1 has won!\n")
+    elif p1 == "paper":
+        if p2 == "rock":
+            print("p1 has won!\n")
+        elif p2 == "scissors":
+            print("p2 has won!\n")
+    elif p1 == "scissors":
+        if p2 == "rock":
+            print("p2 has won!\n")
+        elif p2 == "paper":
+            print("p1 has won!\n")
+    newGame = (input("would you like to start a new game? (y/n):\n")).lower()
+    if newGame == "n":
+        break
