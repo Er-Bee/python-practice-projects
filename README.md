@@ -1,3 +1,5 @@
-# random
+# python
 
-created a password generator in python using the 'random' function as well as utf-8.
+Relatively small python projects I've made:
+
+1) password generator: using the 'random' function as well as utf-8.
