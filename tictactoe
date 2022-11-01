@@ -1,0 +1,179 @@
+import random
+
+def display(board):
+    for i in board:
+        print(i)
+
+def win_check(board):
+    
+    winner = ' '
+    tested = False
+    #win condition
+    while not tested:
+        if board[0][0].replace(' ', '').isalpha() and board[0][0].replace(' ', '') == board[0][2].replace(' ', '') and board[0][1].replace(' ', '') == board[0][3].replace(' ', ''):
+            if board[0][0].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [0][0].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+            else:
+                winner = ' '
+        if board[1][0].replace(' ', '').isalpha() and board[1][0].replace(' ', '') == board[1][1].replace(' ', '') and board[1][0].replace(' ', '') == board[1][2].replace(' ', ''):
+            if board[1][0].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [1][0].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+        if board[2][0].replace(' ', '').isalpha() and board[2][0].replace(' ', '') == board[2][1].replace(' ', '') and board[2][0].replace(' ', '') == board[2][2].replace(' ', ''):
+            if board[2][0].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [2][0].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+        if board[0][0].replace(' ', '').isalpha() and board[0][0].replace(' ', '') == board[1][0].replace(' ', '') and board[0][0].replace(' ', '') == board[2][0].replace(' ', ''):
+            if board[0][0].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [0][0].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+        if board[0][1].replace(' ', '').isalpha() and board[0][1].replace(' ', '') == board[1][1].replace(' ', '') and board[0][1].replace(' ', '') == board[2][1].replace(' ', ''):
+            if board[0][1].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [0][1].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+        if board[0][2].replace(' ', '').isalpha() and board[0][2].replace(' ', '') == board[1][2].replace(' ', '') and board[0][2].replace(' ', '') == board[2][2].replace(' ', ''):
+            if board[0][2].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [0][2].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+        if board[0][0].replace(' ', '').isalpha() and board[0][0].replace(' ', '') == board[1][1].replace(' ', '') and board[0][0].replace(' ', '') == board[2][2].replace(' ', ''):
+            if board[0][0].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [0][0].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+        if board[2][0].replace(' ', '').isalpha() and board[2][0].replace(' ', '') == board[1][1].replace(' ', '') and board[2][0].replace(' ', '') == board[0][2].replace(' ', ''):
+            if board[2][0].replace(' ', '') == 'X':
+                winner = 'user'
+                break
+            elif board [2][0].replace(' ', '') == 'O':
+                winner = 'opponent'
+                break
+        tested = True
+                
+    return winner
+    
+    
+
+def game_on(turn):
+    optionList = ['Y','N']
+    choice = ''
+    if turn ==5:
+        return False
+    while choice not in optionList:
+        choice = input("Would you like to continue? 'Y/N' ")
+        if choice.upper() in optionList:
+            if choice.upper() == 'Y':
+                return True
+            elif choice.upper() == 'N':
+                return False
+        else:
+            print("Has to be 'Y' or 'N'!")
+
+
+
+def update(board,turn):
+    user_input()
+    if win_check(board) == 'user':
+        display(board)
+        print('You won! Good job!')
+        return False
+    board = opponentMove(board,turn)
+    display(board)
+    print("")
+    if win_check(board) == 'opponent':
+        print('The opponent beat you! better luck next time.')
+        return False
+    
+    return game_on(turn)
+
+
+def user_input():
+    choice = ' '
+    rangeCheck = False
+    print("Reminder: You're playing the X's!\n")
+    while not choice.isdigit() or not rangeCheck:
+        choice = input("Please enter your desired position: ")
+        if not choice.isdigit() or int(choice) not in range (1,10):
+            print('The value needs to be a number between 1-9!')
+        else:
+            for item in range(len(board)):
+                
+                for num in range(len(board[item])):
+                    
+                    if board[item][num].replace(' ', '').isdigit() and int(board[item][num]) == int(choice):
+                        board[item][num] = "  X  "
+                        rangeCheck = True
+                        break
+                        
+                if rangeCheck:
+                    break
+                    
+            if not rangeCheck:
+                print("Please enter a valid value!")
+
+
+def opponentMove(board,turn):
+    moveDone = False
+    if turn == 5:
+        moveDone = True
+    while not moveDone:
+        ranChoice = random.randint(1,10)
+        for item in range(len(board)):
+            for num in range(len(board[item])):
+                if board[item][num].replace(' ', '').isdigit() and int(board[item][num]) == ranChoice:
+                    board[item][num] = "  O  "
+                    moveDone = True
+                    break
+            if moveDone:
+                break
+                        
+    return board
+
+
+def game_start():
+    global gameOn
+    turn = 0
+    user = ' '
+    check = ['start', 'Start','START']
+    while user.lower() not in check:
+        user = input("Welcome! to start the game, type in 'Start' !")
+    gameOn = True
+    display(board)
+    while gameOn:
+        if turn == 5:
+            display(board)
+            print('Full Screen! No Winner!')
+            gameOn = False
+            break
+        turn +=1
+        gameOn = update(board,turn)
+    
+        
+    if turn == 5:
+            print('Full Screen! No Winner!')
+    print('Thanks for checking this out!')
+
+
+
+board = [[' 7 ', ' 8 ', ' 9 '],[' 4 ', ' 5 ', ' 6 '],[' 1 ', ' 2 ', ' 3 ']]
+game_start()
