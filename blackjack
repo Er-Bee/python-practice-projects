@@ -1,0 +1,172 @@
+import random
+
+
+suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
+ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
+#altered values for the blackjack game
+values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 
+            'Nine':9, 'Ten':10, 'Jack':10, 'Queen':10, 'King':10, 'Ace':11}
+
+class Card:
+    
+    def __init__(self,suit,rank):
+        self.suit = suit
+        self.rank = rank
+        self.value = values[rank]
+        
+    def __str__(self):
+        return self.rank + " of " + self.suit
+
+
+
+class Deck:
+    
+    def __init__(self):
+        self.all_cards = []
+        
+        for suit in suits:
+            for rank in ranks:
+                created_card = Card(suit,rank)
+                self.all_cards.append(created_card)
+                
+    def shuffle(self):
+        random.shuffle(self.all_cards)
+        
+    def deal(self):
+        return self.all_cards.pop()
+
+
+class Player:
+    
+    def __init__(self):
+        
+        self.name = "Player 1"
+        self.hand = []
+        self.money = 50
+        
+    def __str__(self):
+        return f"Player {self.name} has {self.money} chips left!"
+
+
+print("Welcome to the Black Jack card game! enjoy!\n")
+game_on = True
+p1 = Player()
+while game_on:
+    
+    #resetting hands and shuffling new deck
+    choice = ''
+    isBust = False
+    card_sum = 0
+    dealer_sum = 0
+    options = ["hit", "stand"]
+    mode = ["y","n"]
+    p1.hand = []
+    dHand = []
+    new_deck = Deck()
+    Deck.shuffle(new_deck)
+    
+    if p1.money == 0:
+        print("you've lost all your money! better luck next time!")
+        break
+    
+    # betting process
+    bet = input(f"Please enter a bet. you have {p1.money} chips left.\n")
+    while not bet.isdigit() or int(bet) > p1.money:
+        bet = input(f"Please enter a valid bet. you have {p1.money} chips left.\n")
+        if bet.isdigit() and int(bet) <= p1.money:
+            break
+        else:
+            bet = input(f"Please enter a valid bet. you have {p1.money} chips left.\n")
+    p1.money -= int(bet)
+    print(f"you bet {bet} chips!\n\n")
+    
+    print("The cards will now be dealt.\n")
+    dHand.append(new_deck.deal())
+    dHand.append(new_deck.deal())
+    dealer_sum += dHand[0].value
+    dealer_sum += dHand[1].value
+    
+    p1.hand.append(new_deck.deal())
+    p1.hand.append(new_deck.deal())
+    card_sum += p1.hand[0].value
+    card_sum += p1.hand[1].value
+    
+    print(f"The dealer's revealed card is: {dHand[0]}! (remember, it has another hidden card!)")
+    print(f"Your cards are {p1.hand[0]} and {p1.hand[1]}\n")
+    
+    choice = input("Would you like to Hit or Stand? ")
+    print("")
+    while choice.lower() not in options:
+        print("please enter a valid option.")
+        choice = input("Would you like to Hit or Stand? ")
+        print("")
+        
+    while choice.lower() in options:
+        if choice.lower() == "hit":
+            draw = new_deck.deal()
+            p1.hand.append(draw)
+            card_sum += draw.value
+            
+            print("Your cards are: ")
+            for card in p1.hand:
+                print(card)
+            print(f"your overall sum is {card_sum}.\n")
+            
+            if card_sum > 21:
+                for card in p1.hand:
+                    if card.rank == "Ace":
+                        card_sum -= 10
+                if card_sum > 21:
+                    print("BUST!\n\n")
+                    isBust = True
+                    break
+                
+            else:
+                choice = input("Would you like to Hit or Stand? ")
+                print("")
+                while choice.lower() not in options:
+                    print("please enter a valid option.")
+                    choice = input("Would you like to Hit or Stand? ")
+                    print("")
+                    continue
+                    
+        else:
+            while dealer_sum <= 17:
+                draw = new_deck.deal()
+                print(f"The dealer drew a {draw}.")
+                dealer_sum += draw.value
+                print(f"The dealer's sum is currently: {dealer_sum}\n")
+            break
+                
+    if isBust:
+        continue
+                
+    # user win
+    if dealer_sum > 21:
+        p1.money += int(bet)*2
+        print(f"You won {bet} chips!")
+        while choice.lower() not in mode:
+            choice = input("Would you like to continue? (y or n)")
+        if choice.lower() == "n":
+            game_on = False
+            break
+            
+    #user win
+    elif dealer_sum < card_sum:
+        p1.money += int(bet)*2
+        print(f"You won {bet} chips!")
+        while choice.lower() not in mode:
+            choice = input("Would you like to continue? (y or n)")
+        if choice.lower() == "n":
+            game_on = False
+            break
+    else:
+        print(f"dealer beat you with a {dealer_sum}!")
+        
+            
+            
+    if p1.money == 0:
+        print("you've lost all your money! better luck next time!")
+        break
+    
+print("Thanks for playing!")
