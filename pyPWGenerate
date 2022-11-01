@@ -1,0 +1,53 @@
+# -*- coding: utf-8 -*-
+
+"""
+password generator
+note to self: if you want to save every usable character
+and then randomly pick, import string for easy access to 
+lower / upper and digits instead of what i did.
+what i did is:
+33 - 47 (including) are symbols
+58 - 64 (including) are more symbols
+91 - 96 (including) are more more symbols
+48 - 57 (including) are digits
+65 - 90 (including) are uppercase letters
+97 - 122 (including) are lowercase letters
+"""
+
+import random
+def random_symbol():
+    n = random.randint(0, 27)
+    if n < 15:
+        n+=33
+    elif n < 22:
+        n+=43
+    else:
+        n+=69
+    return str(chr(n))
+
+def random_digit():
+    n = random.randint(0, 9)
+    return str(n)
+
+def random_lower():
+    n = random.randint(97, 122)
+    return str(chr(n))
+
+def random_upper():
+    n = random.randint(65, 90)
+    return str(chr(n))
+
+def gen_pw():
+    r = range(0,13)
+    pw = ""
+    for num in r:
+        n = random.randint(0,3)
+        if n == 0:
+            pw+=random_digit()
+        elif n == 1:
+            pw+=random_symbol()
+        elif n == 2:
+            pw+=random_lower()
+        else:
+            pw+=random_upper()
+    return pw
