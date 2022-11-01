@@ -1,0 +1,79 @@
+import math
+class point:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+    def __str__(self):
+        return f"({self.x},{self.y})"
+    def isequal(self, other):
+        return self.x == other.x and self.y == other.y
+
+def distance(p1, p2):
+    return math.sqrt((int(p2.x) - int(p1.x))**2 + (int(p2.y)-int(p1.y))**2)
+
+def newpoint():
+    a = input("enter the coords of the point: ")
+    counter = 0
+    for char in a:
+        if char == ' ':
+            a = a.replace(' ','')
+    x = ''
+    y = ''
+    for char in a:
+        if not char == ',':
+            x += char
+            counter +=1
+            a = a[counter::]
+        else:
+            
+            a = a[counter::]
+            counter +=1
+            break
+
+    for char in a:
+        y += char
+        counter +=1
+        a = a[counter::]
+
+
+    print(f'New point created at:({x},{y})')
+    return point(x,y)
+
+def main():
+	#list of points
+	points = []
+
+	#list of paired points
+	ppl = []
+
+	while True:
+	    answer = input("would you like to insert a point? ")
+	    if answer.lower().startswith('y'):
+	        points.append(newpoint())
+	    else:
+	        break
+	print("existing points are: ")
+	for p in points:
+	    print(p)
+	    
+	print("\n")
+	for i in range(len(points)):
+	    cp = points.pop(0)
+	    for p in points:
+	        if not cp.isequal(p):
+	            ppl.append([cp,p])
+
+
+	minpair = [ppl[0][0],ppl[0][1]]
+	mind = distance(minpair[0],minpair[1])
+
+	for i in range(len(ppl)):
+	    if min(distance(ppl[i][0],ppl[i][1]), mind) < mind:
+	        mind = distance(ppl[i][0],ppl[i][1])
+	        minpair = [ppl[i][0],ppl[i][1]]
+
+	print(f"{minpair[0]},{minpair[1]} is the pair of points with the shortest distance.")
+
+
+if __name__ == '__main__':
+	main()
