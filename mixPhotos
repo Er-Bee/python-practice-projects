@@ -1,0 +1,35 @@
+from PIL import Image
+
+img1 = Image.open(input("please input the first picture's path "))
+img2 = Image.open(input("please input the second picture's path "))
+
+while True:
+    if img1.size == img2.size:
+        break
+    elif img1.size > img2.size:
+        img1 = img1.resize(img2.size)
+        base = img2.copy()
+        over = img1.copy()
+        break
+    else:
+        img2 = img2.resize(img1.size)
+        base = img1.copy()
+        over = img2.copy()
+        break
+
+
+
+"""
+decrease size of 'tenth' and in increase size of range relatively for smaller stripes ; smoother mix
+"""
+tenth = int(over.size[0]/10)
+for i in range(0,11):
+    if i == 0:
+        base.paste(over.crop((tenth*i,0,tenth*i+tenth, base.size[1])),(tenth*i,0))
+        pass
+    if i%2 ==0:
+        base.paste(over.crop((tenth*i,0,tenth*i+tenth, base.size[1])),(tenth*i,0))
+    else:
+        pass
+    
+base.show()
